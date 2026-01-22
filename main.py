@@ -1,11 +1,15 @@
 import csv
 import html
+import os
 import re
+import time
 from pathlib import Path
 
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 
+
+DEV_MODE = False
 
 START_URL = (
     "https://data.water.vic.gov.au/WMIS/#/overview/stations"
@@ -51,76 +55,228 @@ def _extract_id_text_after_sh(sh_element) -> str:
     return _normalize_text(raw)
 
 
-def main() -> int:
-    # Recreate CSV on each run
-    out_path = Path("links.csv")
-    if out_path.exists():
-        out_path.unlink()
+def _ts() -> str:
+    return time.strftime("%H:%M:%S")
 
-    with out_path.open("w", newline="", encoding="utf-8") as f:
+
+def _log(msg: str) -> None:
+    print(f"[{_ts()}] {msg}", flush=True)
+
+
+def _safe_click(
+    locator, *, label: str, timeout_ms: int = 20_000, prefer_dom: bool = False
+) -> None:
+    """
+    Click helper with verbose logging.
+    Tries a normal Playwright click first; if pointer interception blocks it,
+    falls back to a DOM click (el.click()) so we can keep moving.
+    """
+    if prefer_dom:
+        _log(f"Clicking {label} (DOM click preferred: el.click())...")
+        locator.evaluate("(el) => el.click()")
+        _log(f"Clicked {label} (DOM click)")
+        return
+
+    _log(f"Clicking {label} (normal click)...")
+    try:
+        locator.click(timeout=timeout_ms)
+        _log(f"Clicked {label} (normal click OK)")
+        return
+    except PlaywrightTimeoutError as e:
+        msg = str(e)
+        _log(
+            f"Normal click timed out for {label}: {msg.splitlines()[0] if msg else 'timeout'}"
+        )
+        _log(f"Falling back to DOM click for {label} (el.click())...")
+        locator.evaluate("(el) => el.click()")
+        _log(f"Clicked {label} (DOM click fallback)")
+
+
+def main() -> int:
+    # Recreate CSV on each run.
+    # On Windows, deleting can fail if the file is open (Excel/preview/etc),
+    # so we prefer opening with mode="w" (truncate) and give a clear message if locked.
+    out_path = Path("links.csv")
+    _log("Creating links.csv with header: name,id,link")
+
+    try:
+        f = out_path.open("w", newline="", encoding="utf-8")
+    except PermissionError:
+        _log("ERROR: links.csv is locked by another process. Close it (Excel/preview/editor) and re-run.")
+        return 2
+
+    with f:
         writer = csv.writer(f)
         writer.writerow(["name", "id", "link"])
+        f.flush()
+        try:
+            os.fsync(f.fileno())
+        except OSError:
+            # Best-effort; some environments/filesystems may not support fsync.
+            pass
 
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            context = browser.new_context()
-            page = context.new_page()
+        def collect_station_ids(browser_) -> list[str]:
+            _log("Collecting station ids once (base session)...")
+            context_ = browser_.new_context()
+            page_ = context_.new_page()
 
-            page.goto(START_URL, wait_until="domcontentloaded")
+            _log(f"Opening start URL (will follow redirects): {START_URL}")
+            page_.goto(START_URL, wait_until="domcontentloaded", timeout=60_000)
+            _log(f"Current URL after load: {page_.url}")
 
-            # Click Surface Water (tolerant match)
-            surface = (
-                page.locator("div.topicCardHeadingText")
+            _log('Locating "Surface Water" card heading...')
+            surface_ = (
+                page_.locator("div.topicCardHeadingText")
                 .filter(has_text=re.compile(r"surface\s*water", re.IGNORECASE))
                 .first
             )
-            surface.wait_for(state="visible", timeout=30_000)
-            surface.click()
+            surface_.wait_for(state="visible", timeout=30_000)
+            # The normal click can be blocked by an overlay; DOM click is consistently faster here.
+            _safe_click(surface_, label='"Surface Water"', prefer_dom=True)
+            _log(f"URL after clicking Surface Water: {page_.url}")
 
-            # Locate list container (prefer exact ID, then fallback)
-            list_container = page.locator("#wmis-sites-list")
-            if list_container.count() == 0:
-                list_container = page.locator('[id*="wmis-sites-list"]')
-            list_container.first.wait_for(state="attached", timeout=30_000)
-            list_container = list_container.first
+            _log("Waiting for station rows (div.st[id]) to appear...")
+            station_rows_ = page_.locator("div.st[id]")
+            try:
+                station_rows_.first.wait_for(state="attached", timeout=30_000)
+            except PlaywrightTimeoutError:
+                _log("Timed out waiting for station rows. Writing debug screenshot: debug_no_station_rows.png")
+                page_.screenshot(path="debug_no_station_rows.png", full_page=True)
+                raise
 
-            # Capture the currently loaded station IDs (no scrolling, as requested)
-            station_ids = list_container.locator("div.st").evaluate_all(
-                "els => els.map(e => e.id).filter(Boolean)"
-            )
+            _log("Collecting currently loaded station row IDs (div.st[id])...")
+            ids = station_rows_.evaluate_all("els => els.map(e => e.id).filter(Boolean)")
+            _log(f"Collected {len(ids)} station IDs.")
+            context_.close()
+            return ids
 
-            for sid in station_ids:
-                station = list_container.locator(f"div.st#{sid}")
-                sh = station.locator("div.sh").first
+        def process_station_id(browser_, sid: str) -> tuple[str, str, str] | None:
+            """
+            Unique session per station row:
+            - new context
+            - open WMIS start url
+            - click Surface Water
+            - find station by sid
+            - click station, then Documents -> Gaugings and Ratings
+            - return name, id, final link
+            """
+            context_ = browser_.new_context()
+            page_ = context_.new_page()
 
+            try:
+                _log(f"  Opening start URL: {START_URL}")
+                page_.goto(START_URL, wait_until="domcontentloaded", timeout=60_000)
+
+                surface_ = (
+                    page_.locator("div.topicCardHeadingText")
+                    .filter(has_text=re.compile(r"surface\s*water", re.IGNORECASE))
+                    .first
+                )
+                surface_.wait_for(state="visible", timeout=30_000)
+                _safe_click(surface_, label='"Surface Water"', prefer_dom=True)
+
+                station_ = page_.locator(f"div.st#{sid}")
                 try:
-                    sh.wait_for(state="visible", timeout=10_000)
+                    station_.wait_for(state="attached", timeout=30_000)
                 except PlaywrightTimeoutError:
-                    # Station got virtualized/removed; skip
-                    continue
+                    _log(f"  station row {sid!r} not found in this session; skip")
+                    return None
 
-                name = _normalize_text(sh.inner_text(timeout=5_000))
-                station_id = _extract_id_text_after_sh(sh)
+                sh_ = station_.locator("div.sh").first
+                sh_.wait_for(state="visible", timeout=10_000)
 
-                before_url = page.url
-                sh.scroll_into_view_if_needed(timeout=5_000)
-                sh.click(timeout=10_000)
+                name_ = _normalize_text(sh_.inner_text(timeout=5_000))
+                station_id_ = _extract_id_text_after_sh(sh_)
+                _log(f"  name={name_!r}")
+                _log(f"  id={station_id_!r}")
 
-                # WMIS is an SPA: URL may change without full navigation.
+                before_url_ = page_.url
+                sh_.scroll_into_view_if_needed(timeout=5_000)
+                _safe_click(sh_, label=f"station .sh ({name_})", prefer_dom=True, timeout_ms=1_000)
+
                 try:
-                    page.wait_for_function(
+                    page_.wait_for_function(
                         "(prev) => window.location.href !== prev",
-                        arg=before_url,
-                        timeout=7_500,
+                        arg=before_url_,
+                        timeout=5_000,
                     )
                 except PlaywrightTimeoutError:
                     pass
 
-                link = page.url
+                _log(f"  station URL={page_.url!r}")
 
+                documents_ = (
+                    page_.locator("div.text")
+                    .filter(has_text=re.compile(r"\bdocuments\b", re.IGNORECASE))
+                    .first
+                )
+                try:
+                    documents_.wait_for(state="visible", timeout=20_000)
+                except PlaywrightTimeoutError:
+                    _log("  timed out waiting for Documents; writing debug screenshot: debug_no_documents.png")
+                    page_.screenshot(path="debug_no_documents.png", full_page=True)
+                    raise
+                _safe_click(documents_, label='"Documents"', prefer_dom=True, timeout_ms=2_000)
+
+                gr_ = (
+                    page_.locator("div.doclabel")
+                    .filter(has_text=re.compile(r"gaugings\s*and\s*ratings", re.IGNORECASE))
+                    .first
+                )
+                try:
+                    gr_.wait_for(state="visible", timeout=20_000)
+                except PlaywrightTimeoutError:
+                    _log(
+                        "  timed out waiting for Gaugings and Ratings; writing debug screenshot: debug_no_gaugings_and_ratings.png"
+                    )
+                    page_.screenshot(path="debug_no_gaugings_and_ratings.png", full_page=True)
+                    raise
+
+                before_url_ = page_.url
+                _safe_click(gr_, label='"Gaugings and Ratings"', prefer_dom=True, timeout_ms=2_000)
+                try:
+                    page_.wait_for_function(
+                        "(prev) => window.location.href !== prev",
+                        arg=before_url_,
+                        timeout=10_000,
+                    )
+                except PlaywrightTimeoutError:
+                    pass
+
+                link_ = page_.url
+                _log(f"  final link={link_!r}")
+                return (name_, station_id_, link_)
+            finally:
+                context_.close()
+
+        with sync_playwright() as p:
+            _log("Launching Chromium (headless)")
+            browser = p.chromium.launch(headless=True)
+
+            station_ids = collect_station_ids(browser)
+
+            written_rows = 0
+            for idx, sid in enumerate(station_ids, start=1):
+                _log(f"[{idx}/{len(station_ids)}] Processing station row id={sid!r} (unique session)")
+                result = process_station_id(browser, sid)
+                if result is None:
+                    continue
+
+                name, station_id, link = result
                 writer.writerow([name, station_id, link])
+                f.flush()
+                try:
+                    os.fsync(f.fileno())
+                except OSError:
+                    pass
+                _log("  wrote CSV row")
 
-            context.close()
+                written_rows += 1
+                if DEV_MODE and written_rows >= 5:
+                    _log("DEV_MODE=True -> stopping after 5 rows")
+                    break
+
+            _log("Done. Closing browser.")
             browser.close()
 
     return 0
