@@ -10,19 +10,29 @@ from datetime import datetime
 
 
 def load_links_csv(csv_path):
-    """Load links2.csv and return a dictionary mapping id -> link."""
+    """Load links2.csv and return a dictionary mapping id -> link, plus a set of duplicate ids."""
     id_to_link = {}
+    duplicate_ids = set()
+    
     with open(csv_path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
             # Trim the id and use it as key
             row_id = row['id'].strip()
             row_link = row['link'].strip() if row['link'] else ''
-            id_to_link[row_id] = row_link
-    return id_to_link
+            
+            # Check if this id already exists (duplicate)
+            if row_id in id_to_link:
+                duplicate_ids.add(row_id)
+            
+            # Store the first occurrence's link
+            if row_id not in id_to_link:
+                id_to_link[row_id] = row_link
+    
+    return id_to_link, duplicate_ids
 
 
-def process_geojson(source_path, output_path, id_to_link, log_path):
+def process_geojson(source_path, output_path, id_to_link, duplicate_ids, log_path):
     """
     Read source.geojson, replace 'source' fields based on id_to_link mapping,
     write to output_path, and generate a log file.
@@ -33,6 +43,7 @@ def process_geojson(source_path, output_path, id_to_link, log_path):
     
     found_list = []
     not_found_list = []
+    multiple_match_list = []
     
     # Process each feature
     for feature in geojson_data.get('features', []):
@@ -55,6 +66,10 @@ def process_geojson(source_path, output_path, id_to_link, log_path):
             # Found - update the source field
             properties['source'] = id_to_link[prop_id_trimmed]
             found_list.append((prop_name, prop_id_trimmed))
+            
+            # Check if this id had multiple matches in the CSV
+            if prop_id_trimmed in duplicate_ids:
+                multiple_match_list.append((prop_name, prop_id_trimmed))
         else:
             # Not found
             not_found_list.append((prop_name, prop_id_trimmed))
@@ -80,9 +95,16 @@ def process_geojson(source_path, output_path, id_to_link, log_path):
         f.write("-" * 40 + "\n")
         for name, pid in not_found_list:
             f.write(f"  Name: {name}, ID: {pid}\n")
-        f.write(f"\nTotal not found: {len(not_found_list)}\n")
+        f.write(f"\nTotal not found: {len(not_found_list)}\n\n")
+        
+        # (3) Properties with multiple ID matches in links2.csv
+        f.write("(3) PROPERTIES WITH MULTIPLE ID MATCHES IN links2.csv\n")
+        f.write("-" * 40 + "\n")
+        for name, pid in multiple_match_list:
+            f.write(f"  Name: {name}, ID: {pid}\n")
+        f.write(f"\nTotal with multiple matches: {len(multiple_match_list)}\n")
     
-    return len(found_list), len(not_found_list)
+    return len(found_list), len(not_found_list), len(multiple_match_list)
 
 
 def main():
@@ -92,12 +114,12 @@ def main():
     log_path = 'replace.log'
     
     print(f"Loading links from {csv_path}...")
-    id_to_link = load_links_csv(csv_path)
-    print(f"Loaded {len(id_to_link)} link mappings.")
+    id_to_link, duplicate_ids = load_links_csv(csv_path)
+    print(f"Loaded {len(id_to_link)} link mappings ({len(duplicate_ids)} duplicate IDs found).")
     
     print(f"Processing {source_path}...")
-    found_count, not_found_count = process_geojson(
-        source_path, output_path, id_to_link, log_path
+    found_count, not_found_count, multiple_match_count = process_geojson(
+        source_path, output_path, id_to_link, duplicate_ids, log_path
     )
     
     print(f"\nDone!")
@@ -105,6 +127,7 @@ def main():
     print(f"  - Log written to: {log_path}")
     print(f"  - Found and updated: {found_count}")
     print(f"  - Not found: {not_found_count}")
+    print(f"  - Multiple ID matches in CSV: {multiple_match_count}")
 
 
 if __name__ == '__main__':
