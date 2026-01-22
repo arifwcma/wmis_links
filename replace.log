@@ -1,7 +1,7 @@
-replace.py Log - Generated: 2026-01-22 14:34:23
+replace.py Log - Generated: 2026-01-22 15:41:37
 ================================================================================
 
-(1) FOUND AND UPDATED PROPERTIES
+(1) FOUND BY ID
 ----------------------------------------
   Name: MOUNT COLE CREEK @ CROWLANDS, ID: 415245
   Name: WATTLE CREEK @ NAVARRE, ID: 415238
@@ -62,90 +62,251 @@ replace.py Log - Generated: 2026-01-22 14:34:23
   Name: MACKENZIE RIVER @ MCKENZIE CREEK, ID: 415251
   Name: NORTON CREEK @ LOWER NORTON, ID: 415273
 
-Total found and updated: 58
+Total found by ID: 58
 
-(2) NOT FOUND PROPERTIES
+(2) FOUND BY ID (partial - CSV id is substring of geojson id)
 ----------------------------------------
-  Name: LANDSBOROUGH RD, ID: 415265A
-  Name: BROWNS, ID: 415266A
-  Name: MOUNT COLE CREEK AT CROWLANDS, ID: 579006
-  Name: REDBANK CREEK @ REDBANK RESERVOIR H.G., ID: 408218A
-  Name: NAVARRE, ID: 579010
-  Name: ARCHDALE JUNCTION, ID: 81127
-  Name: STAWELL, ID: 579008
-  Name: WIMMERA RIVER AT GLYNWYLLN, ID: 579009
-  Name: FRAMPTONS, ID: 415267A
-  Name: YAWONG WEIR, ID: 578000
-  Name: AVOCA RIVER AT CHARLTON TOWN, ID: 80106
-  Name: AVOCA RIVER AT D/S CHARLTON, ID: 578001
-  Name: RICHARDSON RIVER @ U/S RICHAVON WEIR, ID: 415260
-  Name: RICHARDSON RIVER @ DONALD, ID: 415257
-  Name: WIMMERA HWY, ID: 579012
-  Name: RICHARDSON R U/S RICH AVON WEIR, ID: 578003
-  Name: LAKE BATYO CATYO, ID: BATYO_CATYO
-  Name: Lake Lonsdale, ID: LAKE_LONSDALE
-  Name: LAKE FYANS, ID: LAKE_FYANS
-  Name: ILLAWARRA, ID: 415253A
-  Name: FORREST CREEK @ AMPHITHEATRE RES. H.G., ID: 408216A
-  Name: SUGARLOAF CREEK @ SUGARLOAF RES. H.G., ID: 408217A
-  Name: AVOCA RAIN GAUGE @ AVOCA WATER TREATMENT PLANT, ID: 408800
-  Name: FRANKS GULLY CREEK @ LANDSBOROUGH RES. H.G., ID: 415275A
-  Name: WEATHER STATION @ BELLFIELD RESERVOIR, ID: 415801
-  Name: Lake Bellfield, ID: LAKE_BELLFIELD
-  Name: FYANS CREEK AT FYAN'S CREEK, ID: 579007
-  Name: WEATHER STATION @ WARTOOK RESERVOIR, ID: 415800
-  Name: Wartook Reservoir, ID: WARTOOK
-  Name: LEXTON RES. H.G., ID: 407326A
-  Name: DOCTORS CK U/S LEXTON RESERVOIR, ID: 407303A
-  Name: STONY CK U/S TALBOT, ID: 407315A
-  Name: STONY C TABLOT RES., ID: 407334A
-  Name: MC CALLUMS EVANSFORD, ID: 407314A
-  Name: MCCALLUMS C EVAN RES, ID: 407333A
-  Name: EVERSLEY, ID: 579005
-  Name: LAKE BUNINJON @ CALVERT, ID: 236606
-  Name: LAKE GOLDSMITH @ BEAUFORT, ID: 236603
-  Name: MUSICAL GULLY CREEK @ MUSICAL GULLY RESERVOIR H.G., ID: 236228A
-  Name: CAVE HILL CREEK @ MOUNT COLE, ID: 236231A
-  Name: LONG GULLY CREEK @ THE GLUT, ID: 236230A
-  Name: BRADY SWAMP @ GLENTHOMPSON, ID: 238601
-  Name: LAKE BOLAC @ LAKE BOLAC, ID: 236600
-  Name: CHINAMAN SWAMP @ WESTMERE, ID: 236610
-  Name: MYUNA LANE SWAMP @ WOORNDOO, ID: 236611
-  Name: TATYOON, ID: 589020
-  Name: DRUNG DRUNG, ID: 579014
-  Name: MOORA MOORA RESERVOIR, ID: MOORA
-  Name: GREEN LAKE, ID: GREEN
-  Name: Pine Lake, ID: PINE
-  Name: DOCK LAKE, ID: DOCK
-  Name: TAYLORS LAKE, ID: TAYLORS
-  Name: BURNT CREEK AT WONWONDAH EAST, ID: 579011
-  Name: TOOLONDO RESERVOIR, ID: TOOLONDO
-  Name: GLENELG R @ FULHAM BRIDGE (BOTTOM EC PROBE), ID: 238224B
-  Name: TATIARA CREEK AT BOX FARM, ID: A2391029
-  Name: LAKE BULOKE @ DONALD, ID: 415604
-  Name: DONALD-TCHUM CHANNEL @ D/S SCREW GATES, ID: 415712
-  Name: LAKE ALBACUTYA @ RAINBOW, ID: 415601
-  Name: LAKE HINDMARSH @ JEPARIT, ID: 415600
-  Name: BARR CREEK AT CAPELS FLUME, ID: 407252A
-  Name: GLENELG R @ HARROW (BOTTOM EC PROBE), ID: 238210A
-  Name: KOIJAK CREEK AT RAINSFORD, ID: A2391040
-  Name: KOIJAK CREEK AT WIMMERA HIGHWAY, ID: A2391038
-  Name: GLENELG RIVER AT DERGHOLM, ID: 90142
-  Name: LAKE CHARLEGRARK (HEAD GAUGE) @ BOOROOPKI, ID: 239201
-  Name: MOSQUITO CREEK AT LANGKOOP HALL, ID: A2391076
-  Name: MOSQUITO CREEK AT LANGKOOP, ID: A2391041
-  Name: KOIJACK CREEK AT NEWLAND LAKE OUTFLOW CHANNEL, ID: A2391044
-  Name: YALLA CREEK AT NORILLA, ID: A2391043
-  Name: KOIJACK CREEK AT NEWLAND LAKE, ID: A2391065
-  Name: KOIJAK CREEK AT WESTONS, ID: A2391039
-  Name: LAKE NATIMUK @ HORSHAM, ID: 415602
-  Name: MACKENZIE RIVER AT MCKENZIE CREEK, ID: 579017
-  Name: WIMMERA RIVER AT WALMER, ID: 579000
-  Name: WIMMERA RIVER AT QUANGTONG BRIDGE, ID: 579013
+  source.geojson -> Name: REDBANK CREEK @ REDBANK RESERVOIR H.G., ID: 408218A
+  links.csv      -> Name: REDBANK CREEK @ REDBANK RESERVOIR (HEAD GAUGE), ID: 408218
 
-Total not found: 76
+  source.geojson -> Name: FORREST CREEK @ AMPHITHEATRE RES. H.G., ID: 408216A
+  links.csv      -> Name: FORREST CREEK @ AMPHITHEATRE RESERVOIR HEAD GAUGE, ID: 408216
 
-(3) PROPERTIES WITH MULTIPLE ID MATCHES IN links.csv
+  source.geojson -> Name: SUGARLOAF CREEK @ SUGARLOAF RES. H.G., ID: 408217A
+  links.csv      -> Name: SUGARLOAF CREEK @ SUGARLOAF RESERVOIR HEAD GAUGE, ID: 408217
+
+  source.geojson -> Name: FRANKS GULLY CREEK @ LANDSBOROUGH RES. H.G., ID: 415275A
+  links.csv      -> Name: FRANKS GULLY CREEK @ LANDSBOROUGH RESERVOIR HEAD GAUGE, ID: 415275
+
+  source.geojson -> Name: LEXTON RES. H.G., ID: 407326A
+  links.csv      -> Name: DOCTORS CREEK @ LEXTON RESERVOIR (HEAD GAUGE), ID: 407326
+
+  source.geojson -> Name: STONY CK U/S TALBOT, ID: 407315A
+  links.csv      -> Name: STONY CREEK @ U/S TALBOT RESERVOIR, ID: 407315
+
+  source.geojson -> Name: STONY C TABLOT RES., ID: 407334A
+  links.csv      -> Name: STONY CREEK @ TALBOT RESERVOIR (HEAD GAUGE), ID: 407334
+
+  source.geojson -> Name: MC CALLUMS EVANSFORD, ID: 407314A
+  links.csv      -> Name: MC CALLUMS CREEK @ U/S EVANSFORD RESERVOIR, ID: 407314
+
+  source.geojson -> Name: MCCALLUMS C EVAN RES, ID: 407333A
+  links.csv      -> Name: MCCALLUM'S CREEK @ EVANSFORD RESERVOIR (HEAD GAUGE), ID: 407333
+
+  source.geojson -> Name: MUSICAL GULLY CREEK @ MUSICAL GULLY RESERVOIR H.G., ID: 236228A
+  links.csv      -> Name: MUSICAL GULLY CREEK @ MUSICAL GULLY RESERVOIR HG, ID: 236228
+
+  source.geojson -> Name: CAVE HILL CREEK @ MOUNT COLE, ID: 236231A
+  links.csv      -> Name: CAVE HILL CREEK @ MOUNT COLE, ID: 236231
+
+  source.geojson -> Name: LONG GULLY CREEK @ THE GLUT, ID: 236230A
+  links.csv      -> Name: LONG GULLY CREEK @ THE GLUT, ID: 236230
+
+  source.geojson -> Name: BARR CREEK AT CAPELS FLUME, ID: 407252A
+  links.csv      -> Name: BARR CREEK @ CAPELS FLUME, ID: 407252
+
+Total found by ID (partial): 13
+
+(3) FOUND BY NAME (fuzzy match, score >= 0.4)
 ----------------------------------------
+  source.geojson -> Name: MOUNT COLE CREEK AT CROWLANDS, ID: 579006
+  links.csv      -> Name: MOUNT HOPE CREEK @ MITIAMO, ID: 407236
+  Fuzzy score: 0.5862
 
-Total with multiple matches: 0
+  source.geojson -> Name: ARCHDALE JUNCTION, ID: 81127
+  links.csv      -> Name: CHERRY TREE CREEK @ ARCHDALE JUNCTION, ID: 408207
+  Fuzzy score: 0.4595
+
+  source.geojson -> Name: WIMMERA RIVER AT GLYNWYLLN, ID: 579009
+  links.csv      -> Name: WIMMERA RIVER @ ANTWERP, ID: 415216
+  Fuzzy score: 0.6154
+
+  source.geojson -> Name: AVOCA RIVER AT CHARLTON TOWN, ID: 80106
+  links.csv      -> Name: AVOCA RIVER @ QUAMBATOOK, ID: 408203
+  Fuzzy score: 0.5714
+
+  source.geojson -> Name: AVOCA RIVER AT D/S CHARLTON, ID: 578001
+  links.csv      -> Name: AVON RIVER @ THE CHANNEL, ID: 225224
+  Fuzzy score: 0.5556
+
+  source.geojson -> Name: RICHARDSON RIVER @ U/S RICHAVON WEIR, ID: 415260
+  links.csv      -> Name: THOMSON RIVER @ U/S OF COWWARR WEIR, ID: 225231
+  Fuzzy score: 0.5833
+
+  source.geojson -> Name: RICHARDSON RIVER @ DONALD, ID: 415257
+  links.csv      -> Name: RICHARDSON RIVER @ BANYENA SOUTH, ID: 415210
+  Fuzzy score: 0.6562
+
+  source.geojson -> Name: RICHARDSON R U/S RICH AVON WEIR, ID: 578003
+  links.csv      -> Name: CLARKES CREEK @ D/S DIVERSION WEIR, ID: 233271
+  Fuzzy score: 0.4412
+
+  source.geojson -> Name: Lake Lonsdale, ID: LAKE_LONSDALE
+  links.csv      -> Name: LAKE WELLINGTON @ SALE, ID: 225600
+  Fuzzy score: 0.5
+
+  source.geojson -> Name: AVOCA RAIN GAUGE @ AVOCA WATER TREATMENT PLANT, ID: 408800
+  links.csv      -> Name: KILMORE CREEK @ U/S WASTE WATER TREATMENT PLANT, ID: 405335
+  Fuzzy score: 0.5745
+
+  source.geojson -> Name: WEATHER STATION @ BELLFIELD RESERVOIR, ID: 415801
+  links.csv      -> Name: BELLVIEW CREEK @ U/S BELLVIEW RESERVOIR, ID: 227248
+  Fuzzy score: 0.5128
+
+  source.geojson -> Name: FYANS CREEK AT FYAN'S CREEK, ID: 579007
+  links.csv      -> Name: SCOTTS CREEK @ SCOTTS CREEK, ID: 235223
+  Fuzzy score: 0.5556
+
+  source.geojson -> Name: WEATHER STATION @ WARTOOK RESERVOIR, ID: 415800
+  links.csv      -> Name: SLATER CREEK @ U/S WILSON RESERVOIR, ID: 232224
+  Fuzzy score: 0.4857
+
+  source.geojson -> Name: Wartook Reservoir, ID: WARTOOK
+  links.csv      -> Name: BIRCH CREEK @ DEAN RESERVOIR, ID: 407609
+  Fuzzy score: 0.4286
+
+  source.geojson -> Name: DOCTORS CK U/S LEXTON RESERVOIR, ID: 407303A
+  links.csv      -> Name: MAHARS CREEK @ U/S WILSON RESERVOIR, ID: 232225
+  Fuzzy score: 0.6
+
+  source.geojson -> Name: LAKE BUNINJON @ CALVERT, ID: 236606
+  links.csv      -> Name: LAKE WELLINGTON @ BULL BAY, ID: 226041
+  Fuzzy score: 0.5
+
+  source.geojson -> Name: LAKE GOLDSMITH @ BEAUFORT, ID: 236603
+  links.csv      -> Name: YAM HOLES CREEK D/S BEAUFORT, ID: 236229
+  Fuzzy score: 0.5
+
+  source.geojson -> Name: BRADY SWAMP @ GLENTHOMPSON, ID: 238601
+  links.csv      -> Name: BARKLY RIVER @ GLENCAIRN, ID: 225217
+  Fuzzy score: 0.4231
+
+  source.geojson -> Name: LAKE BOLAC @ LAKE BOLAC, ID: 236600
+  links.csv      -> Name: LAKE CONDAH @ LAKE CONDAH, ID: 237600
+  Fuzzy score: 0.68
+
+  source.geojson -> Name: CHINAMAN SWAMP @ WESTMERE, ID: 236610
+  links.csv      -> Name: HOSPITAL SWAMP @ CONNEWARRE, ID: 233604
+  Fuzzy score: 0.4444
+
+  source.geojson -> Name: MYUNA LANE SWAMP @ WOORNDOO, ID: 236611
+  links.csv      -> Name: SAINT HELENA SWAMP @ V-BLOCK, ID: 409228
+  Fuzzy score: 0.4286
+
+  source.geojson -> Name: MOORA MOORA RESERVOIR, ID: MOORA
+  links.csv      -> Name: TOOLERN CREEK @ MELTON RESERVOIR, ID: 231216
+  Fuzzy score: 0.4688
+
+  source.geojson -> Name: BURNT CREEK AT WONWONDAH EAST, ID: 579011
+  links.csv      -> Name: SPRING CREEK @ BOWDENS, ID: 227222
+  Fuzzy score: 0.4828
+
+  source.geojson -> Name: TOOLONDO RESERVOIR, ID: TOOLONDO
+  links.csv      -> Name: TOORONGA RIVER @ NOOJEE, ID: 226219
+  Fuzzy score: 0.4348
+
+  source.geojson -> Name: TATIARA CREEK AT BOX FARM, ID: A2391029
+  links.csv      -> Name: CALLAHAN CREEK @ OFFTAKE, ID: 233246
+  Fuzzy score: 0.48
+
+  source.geojson -> Name: LAKE BULOKE @ DONALD, ID: 415604
+  links.csv      -> Name: LAKE MOKOAN @ HEAD GAUGE, ID: 404219
+  Fuzzy score: 0.4583
+
+  source.geojson -> Name: DONALD-TCHUM CHANNEL @ D/S SCREW GATES, ID: 415712
+  links.csv      -> Name: GOSCHEN CHANNEL @ D/S OFFTAKE, ID: 415713
+  Fuzzy score: 0.5263
+
+  source.geojson -> Name: LAKE ALBACUTYA @ RAINBOW, ID: 415601
+  links.csv      -> Name: LAKE COLAC OUTFALL @ MEREDITH PARK, ID: 234701
+  Fuzzy score: 0.4412
+
+  source.geojson -> Name: LAKE HINDMARSH @ JEPARIT, ID: 415600
+  links.csv      -> Name: LAKE KING @ METUNG, ID: 226608
+  Fuzzy score: 0.4583
+
+  source.geojson -> Name: GLENELG R @ HARROW (BOTTOM EC PROBE), ID: 238210A
+  links.csv      -> Name: GLENELG RIVER @ BIG CORD, ID: 238231
+  Fuzzy score: 0.4167
+
+  source.geojson -> Name: KOIJAK CREEK AT RAINSFORD, ID: A2391040
+  links.csv      -> Name: FORD CREEK @ MANSFIELD, ID: 405245
+  Fuzzy score: 0.52
+
+  source.geojson -> Name: KOIJAK CREEK AT WIMMERA HIGHWAY, ID: A2391038
+  links.csv      -> Name: MUDDY CREEK @ HENTY HIGHWAY, ID: 238266
+  Fuzzy score: 0.5161
+
+  source.geojson -> Name: GLENELG RIVER AT DERGHOLM, ID: 90142
+  links.csv      -> Name: GLENELG RIVER @ DARTMOOR, ID: 238206
+  Fuzzy score: 0.72
+
+  source.geojson -> Name: LAKE CHARLEGRARK (HEAD GAUGE) @ BOOROOPKI, ID: 239201
+  links.csv      -> Name: LAKE CHARLEGRARK (INFLOW) @ BOOROOPKI, ID: 239200
+  Fuzzy score: 0.7561
+
+  source.geojson -> Name: MOSQUITO CREEK AT LANGKOOP HALL, ID: A2391076
+  links.csv      -> Name: MOSQUITO CREEK DEPRESSION @ CURR ROAD, ID: 406756
+  Fuzzy score: 0.4595
+
+  source.geojson -> Name: MOSQUITO CREEK AT LANGKOOP, ID: A2391041
+  links.csv      -> Name: NINE MILE CREEK @ LONGWOOD, ID: 405327
+  Fuzzy score: 0.5
+
+  source.geojson -> Name: KOIJACK CREEK AT NEWLAND LAKE OUTFLOW CHANNEL, ID: A2391044
+  links.csv      -> Name: BACK CREEK @ BENDIGO QUARRY HILL, ID: 407257
+  Fuzzy score: 0.4222
+
+  source.geojson -> Name: YALLA CREEK AT NORILLA, ID: A2391043
+  links.csv      -> Name: AXE CREEK @ LONGLEA, ID: 406214
+  Fuzzy score: 0.5455
+
+  source.geojson -> Name: KOIJACK CREEK AT NEWLAND LAKE, ID: A2391065
+  links.csv      -> Name: MOIRA CREEK @ MOIRA LAKE, ID: 409232
+  Fuzzy score: 0.5862
+
+  source.geojson -> Name: KOIJAK CREEK AT WESTONS, ID: A2391039
+  links.csv      -> Name: BIRCH CREEK @ SMEATON, ID: 407227
+  Fuzzy score: 0.5217
+
+  source.geojson -> Name: LAKE NATIMUK @ HORSHAM, ID: 415602
+  links.csv      -> Name: LAKE VICTORIA @ LOCH SPORT, ID: 226606
+  Fuzzy score: 0.4231
+
+  source.geojson -> Name: MACKENZIE RIVER AT MCKENZIE CREEK, ID: 579017
+  links.csv      -> Name: AVON RIVER @ VALENCIA CREEK, ID: 225205
+  Fuzzy score: 0.5758
+
+  source.geojson -> Name: WIMMERA RIVER AT WALMER, ID: 579000
+  links.csv      -> Name: WIMMERA RIVER @ JEPARIT, ID: 415212
+  Fuzzy score: 0.6087
+
+  source.geojson -> Name: WIMMERA RIVER AT QUANGTONG BRIDGE, ID: 579013
+  links.csv      -> Name: WIMMERA RIVER @ FAUX BRIDGE, ID: 415240
+  Fuzzy score: 0.697
+
+Total found by fuzzy: 44
+
+(4) NOT FOUND
+----------------------------------------
+  source.geojson -> Name: LANDSBOROUGH RD, ID: 415265A
+  source.geojson -> Name: BROWNS, ID: 415266A
+  source.geojson -> Name: NAVARRE, ID: 579010
+  source.geojson -> Name: STAWELL, ID: 579008
+  source.geojson -> Name: FRAMPTONS, ID: 415267A
+  source.geojson -> Name: YAWONG WEIR, ID: 578000
+  source.geojson -> Name: WIMMERA HWY, ID: 579012
+  source.geojson -> Name: LAKE BATYO CATYO, ID: BATYO_CATYO
+  source.geojson -> Name: LAKE FYANS, ID: LAKE_FYANS
+  source.geojson -> Name: ILLAWARRA, ID: 415253A
+  source.geojson -> Name: Lake Bellfield, ID: LAKE_BELLFIELD
+  source.geojson -> Name: EVERSLEY, ID: 579005
+  source.geojson -> Name: TATYOON, ID: 589020
+  source.geojson -> Name: DRUNG DRUNG, ID: 579014
+  source.geojson -> Name: GREEN LAKE, ID: GREEN
+  source.geojson -> Name: Pine Lake, ID: PINE
+  source.geojson -> Name: DOCK LAKE, ID: DOCK
+  source.geojson -> Name: TAYLORS LAKE, ID: TAYLORS
+  source.geojson -> Name: GLENELG R @ FULHAM BRIDGE (BOTTOM EC PROBE), ID: 238224B
+
+Total not found: 19
