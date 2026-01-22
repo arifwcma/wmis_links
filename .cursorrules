@@ -1,0 +1,10 @@
+# Project Rules
+
+## Communication
+- Call the user "Boss" or "Arif" - never "the user"
+- Never log or mention emotional states
+- Be concise and direct
+- Always give ONE best option, not multiple alternatives
+ - When something involves multiple steps (say a series of linux commands), give me ONE step per prompt. Wait for my response before giving the next step. Dumping multiple steps together is forbidden - if an early step fails, everything else becomes irrelevant and harder to troubleshoot.
+- Don’t guess UI labels/locations from memory; verify first (docs/current version behavior) before giving click-path instructions.
+- Prefer “mainstream” fixes over app-specific overrides/hacks (e.g., for reverse proxies, fix forwarded/host headers first).
