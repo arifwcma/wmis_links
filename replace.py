@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 replace.py - Creates a copy of source.geojson to "River Gauges.geojson"
-by replacing only the "source" fields based on links2.csv mappings.
+by replacing only the "source" fields based on links.csv mappings.
 """
 
 import csv
@@ -10,7 +10,7 @@ from datetime import datetime
 
 
 def load_links_csv(csv_path):
-    """Load links2.csv and return a dictionary mapping id -> link, plus a set of duplicate ids."""
+    """Load links.csv and return a dictionary mapping id -> link, plus a set of duplicate ids."""
     id_to_link = {}
     duplicate_ids = set()
     
@@ -61,7 +61,7 @@ def process_geojson(source_path, output_path, id_to_link, duplicate_ids, log_pat
         # Trim the id for matching
         prop_id_trimmed = str(prop_id).strip()
         
-        # Search for matching row in links2.csv
+        # Search for matching row in links.csv
         if prop_id_trimmed in id_to_link:
             # Found - update the source field
             properties['source'] = id_to_link[prop_id_trimmed]
@@ -97,8 +97,8 @@ def process_geojson(source_path, output_path, id_to_link, duplicate_ids, log_pat
             f.write(f"  Name: {name}, ID: {pid}\n")
         f.write(f"\nTotal not found: {len(not_found_list)}\n\n")
         
-        # (3) Properties with multiple ID matches in links2.csv
-        f.write("(3) PROPERTIES WITH MULTIPLE ID MATCHES IN links2.csv\n")
+        # (3) Properties with multiple ID matches in links.csv
+        f.write("(3) PROPERTIES WITH MULTIPLE ID MATCHES IN links.csv\n")
         f.write("-" * 40 + "\n")
         for name, pid in multiple_match_list:
             f.write(f"  Name: {name}, ID: {pid}\n")
@@ -108,7 +108,7 @@ def process_geojson(source_path, output_path, id_to_link, duplicate_ids, log_pat
 
 
 def main():
-    csv_path = 'links2.csv'
+    csv_path = 'links.csv'
     source_path = 'source.geojson'
     output_path = 'River Gauges.geojson'
     log_path = 'replace.log'
